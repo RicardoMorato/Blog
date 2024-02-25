@@ -4,13 +4,19 @@ import { useDispatch, useSelector } from "react-redux";
 
 import DjangoImgSrc from "../../assets/images/django-logo-negative.png";
 import { fetchRestCheck } from "../store/rest_check";
+import { fetchPosts } from "../store/get_posts";
 
 const Home = () => {
   const dispatch = useDispatch();
   const restCheck = useSelector((state) => state.restCheck);
+  const getPosts = useSelector((state) => state.getPosts);
+
   useEffect(() => {
-    const action = fetchRestCheck();
-    dispatch(action);
+    const restCheckAction = fetchRestCheck();
+    dispatch(restCheckAction);
+
+    const postsAction = fetchPosts();
+    dispatch(postsAction);
   }, [dispatch]);
 
   const [showBugComponent, setShowBugComponent] = useState(false);
@@ -29,6 +35,10 @@ const Home = () => {
         </div>
         <img alt="Django Negative Logo" src={DjangoImgSrc} />
       </div>
+      <h2>POSTS</h2>
+      <ul>
+        {getPosts?.data?.payload?.results.map((post) => (<li>{post?.title}</li>))}
+      </ul>
       <h2>Rest API</h2>
       <p>{restCheck?.data?.payload?.result}</p>
       <Button variant="outline-dark" onClick={() => setShowBugComponent(true)}>
